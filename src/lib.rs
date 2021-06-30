@@ -7,12 +7,13 @@ use quick_xml::events::BytesStart as XMLBytesStart;
 use quick_xml::events::Event as XMLEvent;
 use quick_xml::Error as XMLError;
 use quick_xml::Reader as XMLReader;
+use serde::{Deserialize, Serialize};
 use std::borrow::Cow;
 use std::io::prelude::*;
 use std::str;
 use std::vec::Vec;
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 /// Value from a `<failure />` tag
 pub struct TestFailure {
     /// The `message` attribute
@@ -73,7 +74,7 @@ impl TestFailure {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 /// Value from an `<error />` tag
 pub struct TestError {
     /// The `message` attribute
@@ -134,7 +135,7 @@ impl TestError {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 /// Value from a `<skipped />` tag
 pub struct TestSkipped {
     /// The `message` attribute
@@ -195,7 +196,7 @@ impl TestSkipped {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 /// Status of a test case
 pub enum TestStatus {
     /// Success
@@ -273,7 +274,7 @@ impl TestStatus {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Serialize, Deserialize)]
 /// A test case
 pub struct TestCase {
     /// How long the test case took to run, from the `time` attribute
@@ -369,7 +370,7 @@ impl TestCase {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Serialize, Deserialize)]
 /// A test suite, containing test cases [`TestCase`](struct.TestCase.html)
 pub struct TestSuite {
     pub cases: Vec<TestCase>,
@@ -448,7 +449,7 @@ impl TestSuite {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Serialize, Deserialize)]
 /// Struct representing a JUnit report, containing test suites [`TestSuite`](struct.TestSuite.html)
 pub struct TestSuites {
     pub suites: Vec<TestSuite>,
