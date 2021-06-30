@@ -23,6 +23,13 @@ pub struct TestFailure {
     /// The `type` attribute
     pub failure_type: String,
 }
+
+impl Default for TestFailure {
+    fn default() -> Self {
+        TestFailure::new()
+    }
+}
+
 impl TestFailure {
     pub fn new() -> Self {
         Self {
@@ -31,6 +38,7 @@ impl TestFailure {
             failure_type: String::new(),
         }
     }
+
     fn parse_attributes<'a>(&mut self, e: &'a XMLBytesStart) -> Result<(), Error> {
         for a in e.attributes() {
             let a = a?;
@@ -43,7 +51,7 @@ impl TestFailure {
         Ok(())
     }
 
-    fn new_empty<'a>(e: &'a XMLBytesStart) -> Result<Self, Error> {
+    fn new_empty(e: &XMLBytesStart) -> Result<Self, Error> {
         let mut tf = Self::new();
         tf.parse_attributes(e)?;
         Ok(tf)
@@ -84,6 +92,13 @@ pub struct TestError {
     /// The `type` attribute
     pub error_type: String,
 }
+
+impl Default for TestError {
+    fn default() -> Self {
+        TestError::new()
+    }
+}
+
 impl TestError {
     pub fn new() -> Self {
         Self {
@@ -104,7 +119,7 @@ impl TestError {
         Ok(())
     }
 
-    fn new_empty<'a>(e: &'a XMLBytesStart) -> Result<Self, Error> {
+    fn new_empty(e: &XMLBytesStart) -> Result<Self, Error> {
         let mut te = Self::new();
         te.parse_attributes(e)?;
         Ok(te)
@@ -145,6 +160,13 @@ pub struct TestSkipped {
     /// The `type` attribute
     pub skipped_type: String,
 }
+
+impl Default for TestSkipped {
+    fn default() -> Self {
+        TestSkipped::new()
+    }
+}
+
 impl TestSkipped {
     pub fn new() -> Self {
         Self {
@@ -165,7 +187,7 @@ impl TestSkipped {
         Ok(())
     }
 
-    fn new_empty<'a>(e: &'a XMLBytesStart) -> Result<Self, Error> {
+    fn new_empty(e: &XMLBytesStart) -> Result<Self, Error> {
         let mut ts = Self::new();
         ts.parse_attributes(e)?;
         Ok(ts)
@@ -211,24 +233,18 @@ pub enum TestStatus {
 impl TestStatus {
     /// Returns `true` if the `TestStatus` is [`Success`](#variant.Success).
     pub fn is_success(&self) -> bool {
-        match self {
-            TestStatus::Success => true,
-            _ => false,
-        }
+        matches!(self, TestStatus::Success)
     }
     /// Returns `true` if the `TestStatus` is [`Error(_)`](#variant.Error).
     pub fn is_error(&self) -> bool {
-        match self {
-            TestStatus::Error(_) => true,
-            _ => false,
-        }
+        matches!(self, TestStatus::Error(_))
     }
     /// Returns the contained [`Error(_)`](#variant.Error) value as a reference
     ///
     /// # Panics
     ///
     /// Panics if the value is not an [`Errror(_)`](#variant.Error)
-    pub fn error_as_ref<'a>(&'a self) -> &'a TestError {
+    pub fn error_as_ref(&self) -> &TestError {
         if let TestStatus::Error(ref e) = self {
             return e;
         }
@@ -237,17 +253,14 @@ impl TestStatus {
 
     /// Returns `true` if the `TestStatus` is [`Failure(_)`](#variant.Failure).
     pub fn is_failure(&self) -> bool {
-        match self {
-            TestStatus::Failure(_) => true,
-            _ => false,
-        }
+        matches!(self, TestStatus::Failure(_))
     }
     /// Returns the contained [`Failure(_)`](#variant.Failure) value as a reference
     ///
     /// # Panics
     ///
     /// Panics if the value is not a [`Failure(_)`](#variant.Failure)
-    pub fn failure_as_ref<'a>(&'a self) -> &'a TestFailure {
+    pub fn failure_as_ref(&self) -> &TestFailure {
         if let TestStatus::Failure(ref e) = self {
             return e;
         }
@@ -256,17 +269,14 @@ impl TestStatus {
 
     /// Returns `true` if the `TestStatus` is [`Skipped(_)`](#variant.Skipped).
     pub fn is_skipped(&self) -> bool {
-        match self {
-            TestStatus::Skipped(_) => true,
-            _ => false,
-        }
+        matches!(self, TestStatus::Skipped(_))
     }
     /// Returns the contained [`Skipped(_)`](#variant.Skipped) value as a reference
     ///
     /// # Panics
     ///
     /// Panics if the value is not a [`Skipped(_)`](#variant.Skipped)
-    pub fn skipped_as_ref<'a>(&'a self) -> &'a TestSkipped {
+    pub fn skipped_as_ref(&self) -> &TestSkipped {
         if let TestStatus::Skipped(ref e) = self {
             return e;
         }
@@ -290,6 +300,13 @@ pub struct TestCase {
     /// Class name, from the `classname` attribute
     pub classname: Option<String>,
 }
+
+impl Default for TestCase {
+    fn default() -> Self {
+        TestCase::new()
+    }
+}
+
 impl TestCase {
     fn new() -> Self {
         Self {
@@ -318,7 +335,7 @@ impl TestCase {
         Ok(())
     }
 
-    fn new_empty<'a>(e: &'a XMLBytesStart) -> Result<Self, Error> {
+    fn new_empty(e: &XMLBytesStart) -> Result<Self, Error> {
         let mut tc = Self::new();
         tc.parse_attributes(e)?;
         Ok(tc)
@@ -387,6 +404,13 @@ pub struct TestSuite {
     /// Name of the test suite, from the `name` attribute
     pub name: String,
 }
+
+impl Default for TestSuite {
+    fn default() -> Self {
+        TestSuite::new()
+    }
+}
+
 impl TestSuite {
     fn new() -> Self {
         Self {
@@ -415,7 +439,7 @@ impl TestSuite {
         Ok(())
     }
 
-    fn new_empty<'a>(e: &'a XMLBytesStart) -> Result<Self, Error> {
+    fn new_empty(e: &XMLBytesStart) -> Result<Self, Error> {
         let mut ts = Self::new();
         ts.parse_attributes(e)?;
         Ok(ts)
@@ -466,6 +490,13 @@ pub struct TestSuites {
     /// Name of the test suites, from the `name` attribute
     pub name: String,
 }
+
+impl Default for TestSuites {
+    fn default() -> Self {
+        TestSuites::new()
+    }
+}
+
 impl TestSuites {
     fn new() -> Self {
         Self {
@@ -495,7 +526,7 @@ impl TestSuites {
         Ok(())
     }
 
-    fn new_empty<'a>(e: &'a XMLBytesStart) -> Result<Self, Error> {
+    fn new_empty(e: &XMLBytesStart) -> Result<Self, Error> {
         let mut ts = Self::new();
         ts.parse_attributes(e)?;
         Ok(ts)
@@ -529,18 +560,18 @@ impl TestSuites {
     }
 }
 
-fn try_from_attribute_value_f64<'a>(value: Cow<'a, [u8]>) -> Result<f64, Error> {
+fn try_from_attribute_value_f64(value: Cow<[u8]>) -> Result<f64, Error> {
     match value {
         Cow::Borrowed(b) => {
             let s = str::from_utf8(b)?;
-            if s.len() == 0 {
+            if s.is_empty() {
                 return Ok(0f64);
             }
             Ok(s.parse::<f64>()?)
         }
         Cow::Owned(ref b) => {
             let s = str::from_utf8(b)?;
-            if s.len() == 0 {
+            if s.is_empty() {
                 return Ok(0f64);
             }
             Ok(s.parse::<f64>()?)
@@ -548,18 +579,18 @@ fn try_from_attribute_value_f64<'a>(value: Cow<'a, [u8]>) -> Result<f64, Error> 
     }
 }
 
-fn try_from_attribute_value_u64<'a>(value: Cow<'a, [u8]>) -> Result<u64, Error> {
+fn try_from_attribute_value_u64(value: Cow<[u8]>) -> Result<u64, Error> {
     match value {
         Cow::Borrowed(b) => {
             let s = str::from_utf8(b)?;
-            if s.len() == 0 {
+            if s.is_empty() {
                 return Ok(0u64);
             }
             Ok(s.parse::<u64>()?)
         }
         Cow::Owned(ref b) => {
             let s = str::from_utf8(b)?;
-            if s.len() == 0 {
+            if s.is_empty() {
                 return Ok(0u64);
             }
             Ok(s.parse::<u64>()?)
@@ -567,7 +598,7 @@ fn try_from_attribute_value_u64<'a>(value: Cow<'a, [u8]>) -> Result<u64, Error> 
     }
 }
 
-fn try_from_attribute_value_string<'a>(value: Cow<'a, [u8]>) -> Result<String, Error> {
+fn try_from_attribute_value_string(value: Cow<[u8]>) -> Result<String, Error> {
     match value {
         Cow::Borrowed(b) => Ok(str::from_utf8(b)?.to_owned()),
         Cow::Owned(ref b) => Ok(str::from_utf8(b)?.to_owned()),
