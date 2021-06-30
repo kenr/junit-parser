@@ -3,7 +3,6 @@
 mod errors;
 
 pub use errors::Error;
-use html_escape;
 use quick_xml::events::BytesStart as XMLBytesStart;
 use quick_xml::events::Event as XMLEvent;
 use quick_xml::Error as XMLError;

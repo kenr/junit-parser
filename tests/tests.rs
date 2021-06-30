@@ -795,7 +795,7 @@ fn test_large_test_suites_with_comments() {
     <!-- -->
   </testcase>
   <!-- -->
-  <testcase classname="foo4" name="ATestOnError">
+  <testcase classname="foo4" name="&quot;ATestOnError&quot;">
     <!-- -->
     <error type="Setup">
       setup failure
@@ -838,7 +838,7 @@ fn test_large_test_suites_with_comments() {
     assert_eq!(tf.text, "details about failure");
 
     let tc = &ts.cases[3];
-    assert_eq!(tc.original_name, "ATestOnError");
+    assert_eq!(tc.original_name, "\"ATestOnError\"");
     assert!(tc.status.is_error());
     let tf = tc.status.error_as_ref();
     assert_eq!(tf.error_type, "Setup");
