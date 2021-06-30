@@ -3,6 +3,7 @@
 mod errors;
 
 pub use errors::Error;
+use html_escape;
 use quick_xml::events::BytesStart as XMLBytesStart;
 use quick_xml::events::Event as XMLEvent;
 use quick_xml::Error as XMLError;
@@ -600,8 +601,12 @@ fn try_from_attribute_value_u64(value: Cow<[u8]>) -> Result<u64, Error> {
 
 fn try_from_attribute_value_string(value: Cow<[u8]>) -> Result<String, Error> {
     match value {
-        Cow::Borrowed(b) => Ok(str::from_utf8(b)?.to_owned()),
-        Cow::Owned(ref b) => Ok(str::from_utf8(b)?.to_owned()),
+        Cow::Borrowed(b) => Ok(html_escape::decode_html_entities(str::from_utf8(b)?)
+            .to_owned()
+            .to_string()),
+        Cow::Owned(ref b) => Ok(html_escape::decode_html_entities(str::from_utf8(b)?)
+            .to_owned()
+            .to_string()),
     }
 }
 
