@@ -284,7 +284,7 @@ impl TestStatus {
     }
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 /// A test case
 pub struct TestCase {
     /// How long the test case took to run, from the `time` attribute
@@ -387,7 +387,7 @@ impl TestCase {
     }
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 /// A test suite, containing test cases [`TestCase`](struct.TestCase.html)
 pub struct TestSuite {
     pub cases: Vec<TestCase>,
@@ -473,7 +473,7 @@ impl TestSuite {
     }
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 /// Struct representing a JUnit report, containing test suites [`TestSuite`](struct.TestSuite.html)
 pub struct TestSuites {
     pub suites: Vec<TestSuite>,
